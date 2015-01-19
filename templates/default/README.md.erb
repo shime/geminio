@@ -1,0 +1,23 @@
+# <%= @name.downcase %>
+<% unless @author_github.empty? %>
+[![Build Status](https://travis-ci.org/<%= @author_github %>/<%= @name %>.svg)](https://travis-ci.org/<%= @author_github %>/<%= @name %>)
+<% end %>
+## installation
+
+```shell
+gem install <%= @name.downcase %>
+```
+
+## example
+
+```ruby
+require '<%= @name %>'
+```
+
+## alternatives
+
+* [alternative](http://github.com/rails/rails)
+
+## license
+
+MIT

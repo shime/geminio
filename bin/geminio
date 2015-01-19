@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'geminio'
+require 'optparse'
+
+options = {}
+
+parser = OptionParser.new do |opts|
+  opts.banner = 'usage: geminio [OPTIONS] GEM_NAME'
+
+  opts.separator ""
+  opts.separator "Micro utility that sets up the stage for building gems."
+  opts.separator ""
+  opts.separator "OPTIONS:"
+
+  opts.on('-t', '--template TEMPLATE', String, 'Path to the template that will be used.') do |t|
+    options[:template] = t
+  end
+
+  opts.on('--default', 'Makes the given template a default.') do |d|
+    options[:default] = true
+  end
+
+  opts.on_tail('-v', '--version', "Show version information.") do
+    puts Geminio::VERSION
+    exit
+  end
+
+  opts.on_tail('-h', '--help', "You're reading it.") do
+    puts opts
+    exit
+  end
+end
+
+options[:name] = parser.permute![0]
+parser.parse!
+
+if options.keys.size == 1 && options[:name] == nil
+  puts parser
+  exit 1
+end
+
+if !options[:template] && options[:default]
+  $stderr.puts Geminio::ERROR_MESSAGES[:missing_template]
+  exit 1
+end
+
+if !options[:name] && !options[:default]
+  $stderr.puts Geminio::ERROR_MESSAGES[:missing_name]
+  exit 1
+end
+
+Geminio.run options
